@@ -1,0 +1,7 @@
+export const API_URLS = {
+  clientLogin: 'https://functions.poehali.dev/525c9b1b-6077-47a7-91ce-a08792e9c194',
+  employeeLogin: 'https://functions.poehali.dev/3aa6d4fe-da48-4f9f-9708-943fb59101d3',
+  getClientChat: 'https://functions.poehali.dev/53785cf0-26ba-417b-8660-151e61e4ea0b',
+  sendMessage: 'https://functions.poehali.dev/9a130bcf-b944-4a64-9042-a5f54049b874',
+  api: 'https://functions.poehali.dev/0d608e79-ee4e-4bf8-8f25-e4b4f4beb635',
+};

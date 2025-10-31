@@ -1,14 +1,66 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useEffect } from 'react';
+import ClientLogin from '@/components/ClientLogin';
+import EmployeeLogin from '@/components/EmployeeLogin';
+import EmployeeDashboard from '@/components/EmployeeDashboard';
+import ClientChat from '@/components/ClientChat';
 
-const Index = () => {
+export default function Index() {
+  const [userType, setUserType] = useState<'client' | 'employee' | null>(null);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [showEmployeeLogin, setShowEmployeeLogin] = useState(false);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('currentUser');
+    const savedType = localStorage.getItem('userType');
+    if (savedUser && savedType) {
+      setCurrentUser(JSON.parse(savedUser));
+      setUserType(savedType as 'client' | 'employee');
+    }
+  }, []);
+
+  const handleClientLogin = (clientData: any) => {
+    setCurrentUser(clientData);
+    setUserType('client');
+    localStorage.setItem('currentUser', JSON.stringify(clientData));
+    localStorage.setItem('userType', 'client');
+  };
+
+  const handleEmployeeLogin = (employeeData: any) => {
+    setCurrentUser(employeeData);
+    setUserType('employee');
+    localStorage.setItem('currentUser', JSON.stringify(employeeData));
+    localStorage.setItem('userType', 'employee');
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    setUserType(null);
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('userType');
+    setShowEmployeeLogin(false);
+  };
+
+  if (userType === 'employee' && currentUser) {
+    return <EmployeeDashboard user={currentUser} onLogout={handleLogout} />;
+  }
+
+  if (userType === 'client' && currentUser) {
+    return <ClientChat client={currentUser} onLogout={handleLogout} />;
+  }
+
+  if (showEmployeeLogin) {
+    return (
+      <EmployeeLogin
+        onLogin={handleEmployeeLogin}
+        onBack={() => setShowEmployeeLogin(false)}
+      />
+    );
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4 color-black text-black">Добро пожаловать!</h1>
-        <p className="text-xl text-gray-600">тут будет отображаться ваш проект</p>
-      </div>
-    </div>
+    <ClientLogin
+      onLogin={handleClientLogin}
+      onShowEmployeeLogin={() => setShowEmployeeLogin(true)}
+    />
   );
-};
-
-export default Index;
+}

@@ -1,0 +1,15 @@
+{
+  "tests": [
+    {
+      "name": "Get client chat",
+      "method": "GET",
+      "path": "/?clientId=1",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "chatId": "number",
+        "messages": "array"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

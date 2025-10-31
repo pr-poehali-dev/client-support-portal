@@ -1,0 +1,21 @@
+{
+  "tests": [
+    {
+      "name": "Employee login",
+      "method": "POST",
+      "body": {
+        "login": "123",
+        "password": "803254"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "employee": {
+          "login": "string",
+          "full_name": "string",
+          "role": "string"
+        }
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
