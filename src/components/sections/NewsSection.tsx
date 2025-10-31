@@ -1,16 +1,27 @@
-import { Card, CardContent } from '@/components/ui/card';
-import Icon from '@/components/ui/icon';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function NewsSection({ user }: { user: any }) {
+  const news = [
+    { id: 1, title: 'Обновление системы', date: '2025-10-30', content: 'Система обновлена до новой версии' },
+    { id: 2, title: 'Новые правила работы', date: '2025-10-29', content: 'Обновлены правила обработки чатов' },
+  ];
+
   return (
     <div className="p-6">
-      <Card>
-        <CardContent className="p-8 text-center text-muted-foreground">
-          <Icon name="Newspaper" size={48} className="mx-auto mb-4 opacity-50" />
-          <p>Новости</p>
-          <p className="text-sm mt-2">Раздел в разработке</p>
-        </CardContent>
-      </Card>
+      <h2 className="text-2xl font-bold mb-6">Новости</h2>
+      <div className="grid gap-4">
+        {news.map((item) => (
+          <Card key={item.id}>
+            <CardHeader>
+              <CardTitle className="text-lg">{item.title}</CardTitle>
+              <p className="text-sm text-muted-foreground">{new Date(item.date).toLocaleDateString('ru-RU')}</p>
+            </CardHeader>
+            <CardContent>
+              <p>{item.content}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }

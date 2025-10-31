@@ -58,6 +58,42 @@ def handler(event, context):
             conn.commit()
             result = {'success': True}
         
+        elif action == 'get-employees':
+            cur.execute("SELECT * FROM employees ORDER BY created_at DESC")
+            employees = cur.fetchall()
+            result = {'employees': [dict(e) for e in employees]}
+        
+        elif action == 'add-employee' and method == 'POST':
+            login = body.get('login')
+            password = body.get('password')
+            full_name = body.get('full_name')
+            role = body.get('role', 'operator')
+            skills = body.get('skills', '')
+            cur.execute(
+                "INSERT INTO employees (login, password, full_name, role, skills, status) VALUES (%s, %s, %s, %s, %s, 'offline') RETURNING *",
+                (login, password, full_name, role, skills)
+            )
+            conn.commit()
+            employee = cur.fetchone()
+            result = {'employee': dict(employee)}
+        
+        elif action == 'get-clients':
+            cur.execute("SELECT * FROM clients ORDER BY created_at DESC")
+            clients = cur.fetchall()
+            result = {'clients': [dict(c) for c in clients]}
+        
+        elif action == 'get-all-chats':
+            cur.execute("""
+                SELECT c.*, cl.name as client_name, cl.phone as client_phone, 
+                       e.full_name as employee_name
+                FROM chats c
+                LEFT JOIN clients cl ON c.client_id = cl.id
+                LEFT JOIN employees e ON c.assigned_employee_id = e.id
+                ORDER BY c.created_at DESC
+            """)
+            chats = cur.fetchall()
+            result = {'chats': [dict(c) for c in chats]}
+        
         else:
             result = {'error': 'Unknown action'}
         
